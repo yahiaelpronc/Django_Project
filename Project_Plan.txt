@@ -1,14 +1,13 @@
-1- Registration Page
-2- Login Page ( With Forget Password Button )
+1- Registration Page ( form with backend )
+2- Login Page ( With Forget Password Button ) ( form with backend )
 
 ----------------------- DASHBOARD ----------------------- 
 3- Profile Page ( With Links In Nav Bar ):-
 * My Projects link
 * My Donations link
-* Edit My Info link(Except Email) ( form with backend )
+* Edit My Info link ( Except Email) ( form with backend )
 * Add Extra Info link ( form with backend )
 * delete account link( with confirmation alert )
-
 
 
 4- Create Project Page ( form with backend )
