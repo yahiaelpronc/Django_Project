@@ -1,19 +1,91 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import UpdateView
 from django.views import View
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import auth
-from .models import Course, Trainee
+from .models import UserProfiles
 from .forms import *
 from .serializers import *
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
+
 import json
 
 # Create your views here.
+
+
+def login_redirect(request):
+    return HttpResponseRedirect('/user/login')
+
+
+def loginUserView(request):
+    if(request.method == 'GET'):
+        form = LoginForm(request.POST)
+        return render(request, 'login.html', {'form': form})
+    else:
+        user = UserProfiles.objects.filter(
+            username=request.POST['username'], password=request.POST['password'])
+        if(len(user) != 0):
+            context = {}
+            user = UserProfiles.objects.get(username=request.POST['username'])
+            context['user'] = user
+            return render(request, 'profile.html', context)
+        else:
+            return HttpResponse('Login Failed!')
+
+
+def CreateUserView(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            context = {}
+            context['user'] = UserProfiles.objects.get(
+                username=request.POST['username'])
+            return render(request, 'profile.html', context)
+        else:
+            form = RegistrationForm(request.POST)
+            for field in form:
+                print("Field Error:", field.name,  field.errors)
+            return HttpResponse(form.errors)
+    else:
+        form = RegistrationForm()
+        return render(request, 'Registration.html', {'form': form})
+
+
+def profile(request):
+    args = {'user': request.user}
+    return render(request, 'profile.html', args)
+
+
+def editprofile(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'profile.html')
+        else:
+            print("FORM INVALID!!!!!!!!!!!!")
+            return HttpResponse(form.errors)
+    else:
+        form = RegistrationForm()
+        return render(request, 'Registration.html', {'form': form})
+
+# def CreateUserView(request):
+#     if request.method == 'POST':
+#         form = CreateUserForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             context = {}
+#             context['User'] = request.session.get('username')
+#             form.save()
+#             return render(request, 'login.html', context)
+#     else:
+#         form = CreateUserForm()
+#     return render(request, 'Registration.html', {'form': form})
 
 
 # def list(req):
