@@ -39,6 +39,6 @@ class UserProfiles(models.Model):
     b_date = models.DateField(null=True, blank=True)
     phone_number = PhoneNumberField(null=True, blank=True)
     profile_pic = models.ImageField(
-        null=True, blank=True)
+        upload_to='profileimage', blank=False)
     country = models.CharField(max_length=15,)
     facebook_profile = models.URLField(null=True, blank=True)

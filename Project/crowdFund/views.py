@@ -40,7 +40,7 @@ def loginUserView(request):
 
 def CreateUserView(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             context = {}
