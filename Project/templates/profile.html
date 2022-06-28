@@ -2,130 +2,102 @@
 <html lang="en">
 
 <head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="stylesheet" href="{% static 'style.css'%}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  {% load static %}
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>CrowdFunding</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Muli:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/animate.css/animate.min.css'%}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css'%}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css'%}" rel="stylesheet">
+
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Website Name</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="Registration.html">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <!-- <a class="nav-link" href="#">Link</a> -->
-                    </li>
-                    <li class="nav-item dropdown">
-                        <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown
-                        </a> -->
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <!-- <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li> -->
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <!-- <a class="nav-link disabled">Disabled</a> -->
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <!-- start form  -->
+  <!-- ======= Header ======= -->
+  <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
 
+      <div class="logo">
+        <h1 class="text-light"><a href="index.html">CrowdFunding</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a class="active" href="#">PROFILE</a></li>
+          <li><a href="#">create project</a></li>
+          <li><a href="#">Hello , {{ request.session.username }}</a></li>
+          <li><img src="{{ request.session.profile_pic_url }}" alt="" width="30px" style="border-radius: 30px; margin-left:10px"></li>
+          <li><a href="logout">Logout</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
 
-
-
-    <div class="container">
-        <div class="row">
-            <div class="col-3">
-
-            </div>
-            <div class="col-6">
-                <div class="form-style">
-                    <div class="log-in">
-                        <h4>New to websitename? <a href="http://127.0.0.1:8000/user/Register"> Sing up</a></h3>
-                    </div>
-                    <h4 class="text-sing-up">Profile </h4>
-                    <p>{{user.username}}</p>
-                    <p>{{user.email}}</p>
-                    <p><img src="{{ user.profile_pic.url }}" alt="" width="300"></p>
-                </div>
-            </div>
-            <div class="col-3">
-
-            </div>
-        </div>
     </div>
+  </header><!-- End Header -->
+
+  <main id="main">
 
 
-
-<!-- start footer  -->
-
-    <footer class="footer footer-s ">
-
-
-        <div class="footer-style">
-            <span class="text-muted">Place sticky footer content here.</span>
-
+    
+    <section id="pricing" class="pricing">
+      <div class="container">
+        <div style="margin-bottom:30px">
+          <h1>Your Projects , {{ request.session.username }} :</h1>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="box" data-aos="fade-right">
+              <div class="filtr-item col-sm-2" data-category="1" data-sort="white sample">
+                <center>
+                  <img src="{{ request.session.profile_pic_url }}" width="380"/></center>
+              </div>
+              <h2 style="color:rgb(43, 35, 32);">Project Title</h2>
+              <div class="float-left">
+                <p><strong>Raised:</strong><small class="text-success">  5,000.00</small></p>
+                <p><strong>Goal:</strong><small class="text-danger">  50,000.00</small></p>
+              </div>
+              <div class="btn-wrap">
+                <a href="#" class="btn-buy">Donate Now</a>
+              </div>
+            </div>
         </div>
 
-    </footer>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
 
 
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
 
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js'%}"></script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-    </script>
 </body>
 
 </html>

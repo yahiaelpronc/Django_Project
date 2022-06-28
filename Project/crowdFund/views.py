@@ -19,12 +19,15 @@ import json
 
 
 def login_redirect(request):
-    return HttpResponseRedirect('/user/login')
+    if (request.session.get('username') != None):
+        return render(request, 'index.html')
+    else:
+        return HttpResponseRedirect('user/logout')
 
 
 def loginUserView(request):
     if(request.method == 'GET'):
-        form = LoginForm(request.POST)
+        form = LoginForm()
         return render(request, 'login.html', {'form': form})
     else:
         user = UserProfiles.objects.filter(
@@ -33,9 +36,14 @@ def loginUserView(request):
             context = {}
             user = UserProfiles.objects.get(username=request.POST['username'])
             context['user'] = user
+            request.session['username'] = user.username
+            request.session['profile_pic_url'] = user.profile_pic.url
+            # s = request.session.get('username')
+            # print(s)
             return render(request, 'profile.html', context)
         else:
-            return HttpResponse('Login Failed!')
+            form = LoginForm()
+            return render(request, 'login.html', {'form': form})
 
 
 def CreateUserView(request):
@@ -58,8 +66,7 @@ def CreateUserView(request):
 
 
 def profile(request):
-    args = {'user': request.user}
-    return render(request, 'profile.html', args)
+    return render(request, 'profile.html')
 
 
 def editprofile(request):
