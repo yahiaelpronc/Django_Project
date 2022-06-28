@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from crowdFund import views
 
 urlpatterns = [
-    path('', views.login_redirect, name='login_redirect'),
+    path('', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('user/', include('crowdFund.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

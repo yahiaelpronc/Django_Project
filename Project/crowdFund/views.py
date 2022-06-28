@@ -18,7 +18,7 @@ import json
 # Create your views here.
 
 
-def login_redirect(request):
+def home(request):
     if (request.session.get('username') != None):
         return render(request, 'index.html')
     else:
@@ -33,14 +33,18 @@ def loginUserView(request):
         user = UserProfiles.objects.filter(
             username=request.POST['username'], password=request.POST['password'])
         if(len(user) != 0):
-            context = {}
             user = UserProfiles.objects.get(username=request.POST['username'])
-            context['user'] = user
             request.session['username'] = user.username
             request.session['profile_pic_url'] = user.profile_pic.url
-            # s = request.session.get('username')
-            # print(s)
-            return render(request, 'profile.html', context)
+            request.session['first_name'] = user.first_name
+            request.session['last_name'] = user.last_name
+            request.session['email'] = user.email
+            request.session['b_date'] = user.b_date
+            p = str(user.phone_number)
+            request.session['phone_number'] = p
+            request.session['country'] = user.country
+            request.session['facebook_profile'] = user.facebook_profile
+            return HttpResponseRedirect("/")
         else:
             form = LoginForm()
             return render(request, 'login.html', {'form': form})
@@ -54,7 +58,7 @@ def CreateUserView(request):
             context = {}
             context['user'] = UserProfiles.objects.get(
                 username=request.POST['username'])
-            return render(request, 'profile.html', context)
+            return render(request, 'login.html', context)
         else:
             form = RegistrationForm(request.POST)
             for field in form:
@@ -66,21 +70,73 @@ def CreateUserView(request):
 
 
 def profile(request):
-    return render(request, 'profile.html')
+    if (request.session.get('username') != None):
+        return render(request, 'profile_info.html')
+    else:
+        return HttpResponseRedirect('logout')
 
 
 def editprofile(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return render(request, 'profile.html')
+    if (request.session.get('username') != None):
+        if request.method == 'POST':
+            form = EditForm(request.POST, request.FILES)
+            if form.is_valid():
+
+                # user = UserProfiles.objects.get(id=request.POST['tid'])
+                # user.profile_pic.url = form.cleaned_data['profile_pic'].url
+                # user.first_name
+                # user.last_name
+                # user.email
+                # user.b_date
+                # p = str(user.phone_number)
+                # p
+                # user.country
+                # user.facebook_profile
+                user = UserProfiles.objects.get(
+                    username=request.session['username'])
+                form = EditForm(request.POST, request.FILES, instance=user)
+                # Set New Session Vars
+                request.session['profile_pic_url'] = user.profile_pic.url
+                request.session['first_name'] = user.first_name
+                request.session['last_name'] = user.last_name
+                request.session['email'] = user.email
+                request.session['b_date'] = str(user.b_date)
+                p = str(user.phone_number)
+                request.session['phone_number'] = p
+                request.session['country'] = user.country
+                request.session['facebook_profile'] = user.facebook_profile
+                form.save()
+                return render(request, 'profile_info.html')
+            else:
+                form = RegistrationForm(request.POST)
+                for field in form:
+                    print("Field Error:", field.name,  field.errors)
+                return HttpResponse(form.errors)
         else:
-            print("FORM INVALID!!!!!!!!!!!!")
-            return HttpResponse(form.errors)
+            form = EditForm()
+            return render(request, 'editprofile.html', {'form': form})
     else:
-        form = RegistrationForm()
-        return render(request, 'Registration.html', {'form': form})
+        return HttpResponseRedirect('logout')
+
+
+# def update(r):
+#     context = {}
+#     # get courses
+#     courses = Course.objects.all()
+#     trainee = Trainee.objects.all()
+#     context['courses'] = courses
+#     context['trainees'] = trainee
+#     context['id'] = 1
+#     if(r.method == 'GET'):
+#         return render(r, 'base.html', context)
+#     else:
+#         t = Trainee.objects.get(id=r.POST['tid'])
+#         t.name = r.POST['name']
+#         t.national = r.POST['national']
+#         t.course_id_id = r.POST['course']
+#         t.save()
+#         return render(r, 'base.html', context)
+
 
 # def CreateUserView(request):
 #     if request.method == 'POST':

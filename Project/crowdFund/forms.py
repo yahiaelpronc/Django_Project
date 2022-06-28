@@ -31,3 +31,18 @@ class RegistrationForm(ModelForm):
             'profile_pic',
             'phone_number',
         )
+
+
+class EditForm(ModelForm):
+    class Meta:
+        model = UserProfiles
+        fields = (
+            'first_name',
+            'last_name',
+            'email',
+            'profile_pic',
+            'phone_number',
+            'b_date',
+            'facebook_profile',
+            'country',
+        )
