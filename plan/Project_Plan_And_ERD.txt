@@ -23,9 +23,9 @@ ERD LINK : https://yahiaabdosalama81383.invisionapp.com/freehand/ERD-Django-dV5E
 * Comment Report Button
 * Rate Button ( 1->5 / 5 )
 * Cancel Project Button
-* Show Rating Area
+* Show Rating
 * Picture Carousel
-* Similar Projects Area
+* Similar Projects images and titles
 
 6- Homepage :-
 * Slider For 5 Highest Projects
