@@ -12,9 +12,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
-
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
 import json
-
+import smtplib
+import socket
 # Create your views here.
 
 
@@ -33,21 +36,58 @@ def loginUserView(request):
         user = UserProfiles.objects.filter(
             username=request.POST['username'], password=request.POST['password'])
         if(len(user) != 0):
-            user = UserProfiles.objects.get(username=request.POST['username'])
-            request.session['username'] = user.username
-            request.session['profile_pic_url'] = user.profile_pic.url
-            request.session['first_name'] = user.first_name
-            request.session['last_name'] = user.last_name
-            request.session['email'] = user.email
-            request.session['b_date'] = user.b_date
-            p = str(user.phone_number)
-            request.session['phone_number'] = p
-            request.session['country'] = user.country
-            request.session['facebook_profile'] = user.facebook_profile
-            return HttpResponseRedirect("/")
+            user = UserProfiles.objects.get(
+                username=request.POST['username'], password=request.POST['password'])
+            if(user.Activation_Status):
+                request.session['username'] = user.username
+                request.session['profile_pic_url'] = user.profile_pic.url
+                request.session['first_name'] = user.first_name
+                request.session['last_name'] = user.last_name
+                request.session['email'] = user.email
+                request.session['b_date'] = str(user.b_date)
+                p = str(user.phone_number)
+                request.session['phone_number'] = p
+                request.session['country'] = user.country
+                request.session['facebook_profile'] = user.facebook_profile
+                return HttpResponseRedirect("/")
+            else:
+                return HttpResponse("Account Not Verified")
         else:
             form = LoginForm()
             return render(request, 'login.html', {'form': form})
+
+
+def verify(request, username):
+    user = UserProfiles.objects.get(username=username)
+    if (user != None):
+        user.Activation_Status = True
+        user.save()
+        return render(request, 'Verified.html')
+    else:
+        return HttpResponse("The User You're Trying to Verify Doesn't Exist")
+
+
+def sendEmail(request, recepient):
+    socket.getaddrinfo('localhost', 8000)
+    fromaddr = settings.EMAIL_HOST_USER
+    toaddr = recepient
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.connect("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(fromaddr, "goaigxankojqmhrz")
+    link = 'http://127.0.0.1:8000/user/verify/'+request.POST['username']
+    user = UserProfiles.objects.get(username=request.POST['username'])
+    user.Activation_Link = link
+    user.save()
+    text = 'Hello , '+request.POST['username'] + \
+        ' Please Verify Your CrowdFund Account Here '+link
+    subject = "CrowdFund Account Verification , "+request.POST['username']
+    mailtext = 'Subject:'+subject+'\n\n'+text
+    print(text, type(text))
+    server.sendmail(fromaddr, toaddr, mailtext)
+    server.quit()
 
 
 def CreateUserView(request):
@@ -55,12 +95,14 @@ def CreateUserView(request):
         form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            context = {}
-            context['user'] = UserProfiles.objects.get(
-                username=request.POST['username'])
-            return render(request, 'login.html', context)
+            user = UserProfiles.objects.filter(
+                username=request.POST['username'], password=request.POST['password'])
+            rec = request.POST['email']
+            sendEmail(request, rec)
+            form = LoginForm()
+            return HttpResponseRedirect("login")
         else:
-            form = RegistrationForm(request.POST)
+            form = RegistrationForm(request.POST, request.FILES)
             for field in form:
                 print("Field Error:", field.name,  field.errors)
             return HttpResponse(form.errors)
@@ -81,20 +123,12 @@ def editprofile(request):
         if request.method == 'POST':
             form = EditForm(request.POST, request.FILES)
             if form.is_valid():
-
-                # user = UserProfiles.objects.get(id=request.POST['tid'])
-                # user.profile_pic.url = form.cleaned_data['profile_pic'].url
-                # user.first_name
-                # user.last_name
-                # user.email
-                # user.b_date
-                # p = str(user.phone_number)
-                # p
-                # user.country
-                # user.facebook_profile
                 user = UserProfiles.objects.get(
                     username=request.session['username'])
                 form = EditForm(request.POST, request.FILES, instance=user)
+                form.save()
+                print("-------------------------")
+                print(user.profile_pic.url)
                 # Set New Session Vars
                 request.session['profile_pic_url'] = user.profile_pic.url
                 request.session['first_name'] = user.first_name
@@ -105,8 +139,7 @@ def editprofile(request):
                 request.session['phone_number'] = p
                 request.session['country'] = user.country
                 request.session['facebook_profile'] = user.facebook_profile
-                form.save()
-                return render(request, 'profile_info.html')
+                return HttpResponseRedirect('profile')
             else:
                 form = RegistrationForm(request.POST)
                 for field in form:

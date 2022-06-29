@@ -34,7 +34,8 @@ class UserProfiles(models.Model):
     first_name = models.CharField(max_length=12, null=False)
     last_name = models.CharField(max_length=12, null=False)
     email = models.EmailField(null=False)
-    Activation_Status = models.BooleanField(null=True, blank=True)
+    Activation_Status = models.BooleanField(
+        null=True, blank=True, default=False)
     Activation_Link = models.URLField(null=True, blank=True)
     b_date = models.DateField(null=True, blank=True)
     phone_number = PhoneNumberField(null=True, blank=True)

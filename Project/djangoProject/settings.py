@@ -155,3 +155,12 @@ REST_FRAMEWORK = {
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 PHONENUMBER_DEFAULT_REGION = "EG"
 PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
+
+
+# email stuff
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USER_TLS = True
+EMAIL_HOST_USER = 'yahiaelpronce@gmail.com'
+EMAIL_HOST_PASSWORD = 'Katiba69@'

@@ -28,5 +28,6 @@ urlpatterns = [
     path('logout', LogoutView.as_view(template_name='logout.html')),
     path('Register', CreateUserView, name='register'),
     path('profile', profile, name='profile'),
-    path('editprofile', editprofile, name='editprofile')
+    path('editprofile', editprofile, name='editprofile'),
+    path('verify/<str:username>', verify, name='verify'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
