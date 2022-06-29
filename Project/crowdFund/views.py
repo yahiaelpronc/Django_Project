@@ -18,6 +18,8 @@ from django.template.loader import render_to_string
 import json
 import smtplib
 import socket
+from datetime import date
+from datetime import datetime, timedelta
 # Create your views here.
 
 
@@ -57,12 +59,42 @@ def loginUserView(request):
             return render(request, 'login.html', {'form': form})
 
 
-def verify(request, username):
+def verify(request, username, dates):
     user = UserProfiles.objects.get(username=username)
+    date1 = str(dates)
+    date1 = dates.split('-')
+    # Creation Dates
+    CreationDay = int(date1[2])
+    CreationMonth = int(date1[1])
+    CreationYear = int(date1[0])
+    # Expiration Dates
+    expireDay = str(date.today())
+    expireDay = expireDay.split('-')
+    expireDay = int(expireDay[2]) - CreationDay
+    expireMonth = str(date.today())
+    expireMonth = expireMonth.split('-')
+    expireMonth = int(expireMonth[1]) - CreationMonth
+    expireYear = str(date.today())
+    expireYear = expireYear.split('-')
+    expireYear = int(expireYear[0]) - CreationYear
+    print("-----------------")
+    print(str(dates))
+    print(dates.split('-'))
+    print("-----------------")
+    print(CreationDay)
+    print(CreationMonth)
+    print(CreationYear)
+    print("-----------------")
+    print(expireDay)
+    print(expireMonth)
+    print(expireYear)
     if (user != None):
-        user.Activation_Status = True
-        user.save()
-        return render(request, 'Verified.html')
+        if(expireDay > 0 or expireMonth > 0 or expireYear > 0):
+            return HttpResponse("The Activation Link Expired")
+        else:
+            user.Activation_Status = True
+            user.save()
+            return render(request, 'Verified.html')
     else:
         return HttpResponse("The User You're Trying to Verify Doesn't Exist")
 
@@ -77,7 +109,8 @@ def sendEmail(request, recepient):
     server.starttls()
     server.ehlo()
     server.login(fromaddr, "goaigxankojqmhrz")
-    link = 'http://127.0.0.1:8000/user/verify/'+request.POST['username']
+    link = 'http://127.0.0.1:8000/user/verify/' + \
+        request.POST['username']+'/'+str(date.today())
     user = UserProfiles.objects.get(username=request.POST['username'])
     user.Activation_Link = link
     user.save()

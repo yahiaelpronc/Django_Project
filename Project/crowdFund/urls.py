@@ -29,5 +29,5 @@ urlpatterns = [
     path('Register', CreateUserView, name='register'),
     path('profile', profile, name='profile'),
     path('editprofile', editprofile, name='editprofile'),
-    path('verify/<str:username>', verify, name='verify'),
+    path('verify/<str:username>/<dates>', verify, name='verify'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
