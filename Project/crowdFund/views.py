@@ -20,6 +20,7 @@ import smtplib
 import socket
 from datetime import date
 from datetime import datetime, timedelta
+from vars import *
 # Create your views here.
 
 
@@ -108,7 +109,7 @@ def sendEmail(request, recepient):
     server.ehlo()
     server.starttls()
     server.ehlo()
-    server.login(fromaddr, "goaigxankojqmhrz")
+    server.login(fromaddr, varsA)
     link = 'http://127.0.0.1:8000/user/verify/' + \
         request.POST['username']+'/'+str(date.today())
     user = UserProfiles.objects.get(username=request.POST['username'])
