@@ -39,7 +39,6 @@ class EditForm(ModelForm):
         fields = (
             'first_name',
             'last_name',
-            'email',
             'profile_pic',
             'phone_number',
             'b_date',

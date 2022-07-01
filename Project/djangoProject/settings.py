@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-
+from vars import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ft(*k03r#6a3%e4ct!vf3m*d_l!6(%j#88lm@km9!oars*2q6v'
+SECRET_KEY = varsS
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -127,7 +127,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
+# image uploading
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/profileImages')
@@ -162,5 +162,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USER_TLS = True
-EMAIL_HOST_USER = 'yahiaelpronce@gmail.com'
-EMAIL_HOST_PASSWORD = 'Katiba69@'
+EMAIL_HOST_USER = varsX
+EMAIL_HOST_PASSWORD = varsY

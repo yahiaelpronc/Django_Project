@@ -77,17 +77,17 @@ def verify(request, username, dates):
     expireYear = str(date.today())
     expireYear = expireYear.split('-')
     expireYear = int(expireYear[0]) - CreationYear
-    print("-----------------")
-    print(str(dates))
-    print(dates.split('-'))
-    print("-----------------")
-    print(CreationDay)
-    print(CreationMonth)
-    print(CreationYear)
-    print("-----------------")
-    print(expireDay)
-    print(expireMonth)
-    print(expireYear)
+    # print("-----------------")
+    # print(str(dates))
+    # print(dates.split('-'))
+    # print("-----------------")
+    # print(CreationDay)
+    # print(CreationMonth)
+    # print(CreationYear)
+    # print("-----------------")
+    # print(expireDay)
+    # print(expireMonth)
+    # print(expireYear)
     if (user != None):
         if(expireDay > 0 or expireMonth > 0 or expireYear > 0):
             return HttpResponse("The Activation Link Expired")
@@ -118,7 +118,6 @@ def sendEmail(request, recepient):
         ' Please Verify Your CrowdFund Account Here '+link
     subject = "CrowdFund Account Verification , "+request.POST['username']
     mailtext = 'Subject:'+subject+'\n\n'+text
-    print(text, type(text))
     server.sendmail(fromaddr, toaddr, mailtext)
     server.quit()
 
@@ -130,9 +129,8 @@ def CreateUserView(request):
             form.save()
             user = UserProfiles.objects.filter(
                 username=request.POST['username'], password=request.POST['password'])
-            rec = request.POST['email']
-            sendEmail(request, rec)
-            form = LoginForm()
+            recepient = request.POST['email']
+            sendEmail(request, recepient)
             return HttpResponseRedirect("login")
         else:
             form = RegistrationForm(request.POST, request.FILES)
@@ -160,13 +158,12 @@ def editprofile(request):
                     username=request.session['username'])
                 form = EditForm(request.POST, request.FILES, instance=user)
                 form.save()
-                print("-------------------------")
-                print(user.profile_pic.url)
+                # print("-------------------------")
+                # print(user.profile_pic.url)
                 # Set New Session Vars
                 request.session['profile_pic_url'] = user.profile_pic.url
                 request.session['first_name'] = user.first_name
                 request.session['last_name'] = user.last_name
-                request.session['email'] = user.email
                 request.session['b_date'] = str(user.b_date)
                 p = str(user.phone_number)
                 request.session['phone_number'] = p
