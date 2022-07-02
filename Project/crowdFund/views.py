@@ -31,6 +31,11 @@ def home(request):
         return HttpResponseRedirect('user/logout')
 
 
+def deleteprofile(request):
+    UserProfiles.objects.filter(username=request.session['username']).delete()
+    return HttpResponseRedirect("logout")
+
+
 def loginUserView(request):
     if(request.method == 'GET'):
         form = LoginForm()
@@ -57,7 +62,7 @@ def loginUserView(request):
                 return HttpResponse("Account Not Verified")
         else:
             form = LoginForm()
-            return render(request, 'login.html', {'form': form})
+            return render(request, 'login_invalid.html', {'form': form})
 
 
 def verify(request, username, dates):
@@ -91,16 +96,28 @@ def verify(request, username, dates):
     # print(expireYear)
     if (user != None):
         if(expireDay > 0 or expireMonth > 0 or expireYear > 0):
-            return HttpResponse("The Activation Link Expired")
+            didResend = sendEmail(request, user.email, resend=True,
+                                  username=user.username)
+            if(didResend):
+                return render(request, 'Verified_Expire.html')
+            else:
+                return render(request, 'Verified_ExpireFail.html')
         else:
-            user.Activation_Status = True
-            user.save()
-            return render(request, 'Verified.html')
+            if(user.Activation_Status):
+                return render(request, 'VerifiedAlready.html')
+            else:
+                user.Activation_Status = True
+                user.save()
+                return render(request, 'Verified.html')
     else:
         return HttpResponse("The User You're Trying to Verify Doesn't Exist")
 
 
-def sendEmail(request, recepient):
+def expire(request):
+    pass
+
+
+def sendEmail(request, recepient, resend=False, username=None):
     socket.getaddrinfo('localhost', 8000)
     fromaddr = settings.EMAIL_HOST_USER
     toaddr = recepient
@@ -110,6 +127,19 @@ def sendEmail(request, recepient):
     server.starttls()
     server.ehlo()
     server.login(fromaddr, varsA)
+    if(resend):
+        link = 'http://127.0.0.1:8000/user/verify/' + \
+            username+'/'+str(date.today())
+        user = UserProfiles.objects.get(username=username)
+        user.Activation_Link = link
+        user.save()
+        text = 'Hello , '+username + \
+            ' Please Verify Your CrowdFund Account Here '+link
+        subject = "CrowdFund Account Verification , "+username
+        mailtext = 'Subject:'+subject+'\n\n'+text
+        server.sendmail(fromaddr, toaddr, mailtext)
+        server.quit()
+        return True
     link = 'http://127.0.0.1:8000/user/verify/' + \
         request.POST['username']+'/'+str(date.today())
     user = UserProfiles.objects.get(username=request.POST['username'])
