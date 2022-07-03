@@ -1,0 +1,35 @@
+ERD LINK : https://yahiaabdosalama81383.invisionapp.com/freehand/ERD-Django-dV5EMBI3y?dsid_h=9c5c52882e4d6a0056708148e964dca171103886aeb50f96b02bf3eece112cc0&uid_h=e5968ea2813c90362c95ac3e3bd5135c020b27a35d5a40bf5906a0d155f9debd
+goaigxankojqmhrz
+
+
+-------------------------------------------- PLAN --------------------------------------------
+
+1- Registration Page ( form with backend )
+2- Login Page ( With Forget Password Button ) ( form with backend )
+
+----------------------- DASHBOARD ----------------------- 
+3- Profile Page ( With Links In Nav Bar ):-
+* My Projects link
+* My Donations link
+* Edit My Info link ( Except Email) ( form with backend )
+* Add Extra Info link ( form with backend )
+* delete account link( with confirmation alert )
+
+
+4- Create Project Page ( form with backend )
+5- View Project Page :-
+* comment textbox
+* Project Report Button
+* Comment Report Button
+* Rate Button ( 1->5 / 5 )
+* Cancel Project Button
+* Show Rating
+* Picture Carousel
+* Similar Projects images and titles
+
+6- Homepage :-
+* Slider For 5 Highest Projects
+* List Of Latest Projects Area
+* List Of Featured Projects Area
+* List Of Categories With Pics
+* Search Bar
