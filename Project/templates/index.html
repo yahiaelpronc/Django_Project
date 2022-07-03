@@ -36,22 +36,24 @@
     <div class="container d-flex justify-content-between">
 
       <div class="logo">
-        <h1 class="text-light"><a href="index.html">CrowdFunding</a></h1>
+        <h1 class="text-light"><a href="/">CrowdFunding</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="active" href="index.html">Home</a></li>
-          <li><a href="user/profile">My Info</a></li>
-          <li><a href="#">create project</a></li>
+          <li><a class="active" href="/">Home</a></li>
+          <li><a href="user/allProjects">All Projects</a></li>
+          <li><a href="user/createProject">Create Project</a></li>
           {% if request.session.username == None %}
             <li><a href="user/login">Login</a></li>
             <li><a href="#">/</a></li>
             <li><a href="user/Register">Register</a></li>
           {% else %}
-            <li><a href="user/profile">Hello ,  {{request.session.username}}</a>  </li>
+          <li><a href="user/myProjects">My Projects</a></li>
+          <li><a href="user/profile">My Info</a></li>
+          <li><a href="user/profile">Hello ,  {{request.session.username}}</a>  </li>
             <li><a href="user/logout">Logout</a></li>
           {% endif %}
 
@@ -116,7 +118,7 @@
             <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium repellendus, nostrum sapiente natus reprehenderit iure ullam voluptas facere, dolorum maiores quo, harum id alias ducimus sit. Ipsam labore in reiciendis.</p>
           </div>
           <div class="col-lg-3 cta-btn-container text-center">
-            <a class="cta-btn align-middle" href="#">Donate Now</a>
+            <a class="cta-btn align-middle" href="user/projects">Donate Now</a>
           </div>
         </div>
 

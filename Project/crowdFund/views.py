@@ -31,6 +31,202 @@ def home(request):
         return HttpResponseRedirect('user/logout')
 
 
+def allProjects(request):
+    project = projects.objects.all()
+    context = {}
+    context['projects'] = project
+    return render(request, 'allProjects.html', context)
+
+
+def myProjects(request):
+    if(request.method != 'POST'):
+        user = UserProfiles.objects.get(
+            username=request.session.get('username'))
+        project = projects.objects.filter(
+            createdByUsername=user.username)
+        context = {}
+        context['projects'] = project
+        return render(request, 'profile.html', context)
+    return render(request, 'profile.html')
+
+
+def createProject(request):
+    if request.method == 'POST':
+        form = CreateProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = UserProfiles.objects.get(
+                username=request.session.get('username'))
+            project = projects.objects.get(
+                title=request.POST['title'])
+            if(project):
+                project.createdByUsername = user.username
+                title = project.title
+                title = title.replace(" ", "-")
+                request.session['Project'] = project.title
+                project.save()
+            else:
+                return HttpResponse('project not found')
+            return HttpResponseRedirect("addimages")
+        else:
+            form = CreateProjectForm(request.POST)
+            for field in form:
+                print("Field Error:", field.name,  field.errors)
+            return HttpResponse(form.errors)
+    else:
+        form = CreateProjectForm()
+        context = {}
+        context['form'] = form
+        return render(request, 'CreateProject.html', context)
+
+
+def addimages(request):
+    if request.method == 'POST':
+        form = imagesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            print("========================")
+            request.session.get('title')
+            print("========================")
+            img = images.objects.get(title=form.instance.title)
+            project = projects.objects.get(
+                title=request.session.get('Project'))
+            if(img):
+                img.createdByProject = project.title
+                img.save()
+            else:
+                return HttpResponse('img not found')
+            return HttpResponseRedirect("addimages")
+        else:
+            form = imagesForm(request.POST, request.FILES)
+            for field in form:
+                print("Field Error:", field.name,  field.errors)
+            return HttpResponse(form.errors)
+    else:
+        form = imagesForm()
+        context = {}
+        context['form'] = form
+        return render(request, 'addImages.html', context)
+
+
+def addtags(request):
+    if request.method == 'POST':
+        form = TagsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            tags = Tags.objects.filter(
+                title=request.POST['title'])
+            project = projects.objects.get(
+                title=request.session.get('Project'))
+            if(len(tags) > 0):
+                tagEmpty = Tags.objects.get(
+                    title=request.POST['title'], ProjectTitle="")
+                tagEmpty.ProjectTitle = request.session.get('Project')
+                tagEmpty.save()
+            else:
+                tag = Tags.objects.get(
+                    title=request.POST['title'])
+                tag.ProjectTitle = request.session.get('Project')
+                tag.save()
+            return HttpResponseRedirect("addtags")
+        else:
+            form = TagsForm(request.POST)
+            for field in form:
+                print("Field Error:", field.name,  field.errors)
+            return HttpResponse(form.errors)
+    else:
+        form = TagsForm()
+        context = {}
+        context['form'] = form
+        return render(request, 'addtags.html', context)
+
+
+def viewprojectInvalid(request):
+    return render(request, 'viewprojectInvalid.html')
+
+
+def viewProjects(request, projectTitle=""):
+    if(projectTitle == ""):
+        project = projects.objects.get(
+            title=request.session.get('Project'))
+    else:
+        project = projects.objects.get(
+            title=projectTitle)
+    context = {}
+    context['title'] = project.title
+    context['donated'] = project.donations
+    context['goal'] = project.target
+    context['details'] = project.Details
+    context['endTime'] = project.endTime
+    tags = Tags.objects.filter(
+        ProjectTitle=project.title)
+    for tag in tags:
+        print("--------------------------")
+        print(tag.title)
+        print("--------------------------")
+        similarProject = Tags.objects.filter(
+            title=tag.title)
+        context['sims'] = similarProject
+    context['tags'] = tags
+    if(project.numberOfUsersRated != 0):
+        rate = project.projectRating / project.numberOfUsersRated
+    else:
+        rate = 0
+    rate = format(rate, ".1f")
+    context['Rating'] = rate
+    context['i'] = 0
+    context['imgs'] = images.objects.filter(
+        createdByProject=project.title)
+    context['imgs1'] = str(context['imgs'][0].title.url)
+    print("========================")
+    print(context['imgs'][0].title.url)
+    return render(request, 'view-project.html', context)
+
+
+def donateProject(request, title):
+    if(request.method == 'POST'):
+        value = request.POST['Amount']
+        print(value)
+        project = projects.objects.get(
+            title=title)
+        sum = int(project.donations) + int(value)
+        project.donations = project.donations + sum
+        print(request.POST['Amount'])
+        print(project.donations)
+        project.save()
+        return HttpResponseRedirect("/user/viewProjects/"+project.title)
+    return HttpResponseRedirect("/user/viewProjects/"+project.title)
+
+
+def rateProject(request, title, val):
+    project = projects.objects.get(
+        title=title)
+    project.projectRating = project.projectRating + val
+    project.numberOfUsersRated = project.numberOfUsersRated + 1
+    project.save()
+    # return render(request, 'view-project.html')
+    return HttpResponseRedirect("/user/viewProjects/"+project.title)
+
+
+def reportProject(request, title):
+    project = projects.objects.get(
+        title=title)
+    project.projectRating = project.projectRating - 5
+    project.save()
+    return HttpResponseRedirect("/user/viewProjects/"+project.title)
+
+
+def cancelProject(request, title):
+    project = projects.objects.get(
+        title=title)
+    percentage = project.donations/project.target
+    if(project.createdByUsername == request.session['username'] and percentage > 0.25):
+        project.delete()
+        return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/user/viewprojectInvalid")
+
+
 def deleteprofile(request):
     UserProfiles.objects.filter(username=request.session['username']).delete()
     return HttpResponseRedirect("logout")
@@ -113,10 +309,6 @@ def verify(request, username, dates):
         return HttpResponse("The User You're Trying to Verify Doesn't Exist")
 
 
-def expire(request):
-    pass
-
-
 def sendEmail(request, recepient, resend=False, username=None):
     socket.getaddrinfo('localhost', 8000)
     fromaddr = settings.EMAIL_HOST_USER
@@ -189,8 +381,6 @@ def editprofile(request):
                     username=request.session['username'])
                 form = EditForm(request.POST, request.FILES, instance=user)
                 form.save()
-                # print("-------------------------")
-                # print(user.profile_pic.url)
                 # Set New Session Vars
                 request.session['profile_pic_url'] = user.profile_pic.url
                 request.session['first_name'] = user.first_name

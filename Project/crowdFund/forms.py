@@ -33,6 +33,34 @@ class RegistrationForm(ModelForm):
         )
 
 
+class CreateProjectForm(ModelForm):
+    class Meta:
+        model = projects
+        fields = (
+            'title',
+            'category',
+            'target',
+            'endTime',
+            'Details',
+        )
+
+
+class imagesForm(ModelForm):
+    class Meta:
+        model = images
+        fields = (
+            'title',
+        )
+
+
+class TagsForm(ModelForm):
+    class Meta:
+        model = Tags
+        fields = (
+            'title',
+        )
+
+
 class EditForm(ModelForm):
     class Meta:
         model = UserProfiles

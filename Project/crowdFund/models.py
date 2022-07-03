@@ -2,8 +2,13 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-
+from datetime import datetime
 # Create your models here.
+Categories = (
+    ("c", "Charity"),
+    ("p", "Personal"),
+    ("t", "Team Project"),
+)
 
 
 class UserProfile(models.Model):
@@ -43,3 +48,34 @@ class UserProfiles(models.Model):
         upload_to='profileimage', blank=False)
     country = models.CharField(max_length=15,)
     facebook_profile = models.URLField(null=True, blank=True)
+
+
+class projects(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=20, null=False, unique=True)
+    createdByUsername = models.CharField(
+        max_length=20, null=False)
+    category = models.CharField(max_length=1, choices=Categories)
+    Details = models.TextField(max_length=200, null=True, blank=True)
+    target = models.BigIntegerField(null=False)
+    startTime = models.DateField(
+        null=False, default=datetime.date(datetime.now()))
+    endTime = models.DateField(null=False)
+    numberOfUsersRated = models.IntegerField(default=0)
+    projectRating = models.IntegerField(default=0)
+    donations = models.BigIntegerField(default=0)
+
+
+class images(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.ImageField(
+        upload_to='profileimage', blank=False)
+    createdByProject = models.CharField(
+        max_length=20, null=True, blank=True)
+
+
+class Tags(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=20)
+    ProjectTitle = models.CharField(
+        max_length=20, null=True, blank=True, default="")
