@@ -1,0 +1,120 @@
+
+
+
+
+
+
+
+
+
+
+
+.container{
+    margin-top: 100px;
+}
+
+.deatels{
+    display: flex;
+    flex-direction: row;
+  
+    /* align-items: baseline; */
+}
+
+
+
+
+
+
+
+
+.deatels-img img{
+ width: 400px;
+
+border: 1px black solid;
+}
+.text-datels{
+    margin-left: 30px ;
+    margin-right: 40px;
+ 
+
+}
+ .text-datels h4{
+    font-size: 20px;
+    margin-bottom: 60px;
+}
+.text-datels span{
+    display: block;
+    margin-bottom: 40px;
+}
+
+
+.buttons{
+    margin-left: 70px;
+ 
+}
+.buttons button{
+    margin-bottom: 50px;
+
+}
+.btn-report{
+    width: 150px !important;
+}
+
+.comments{
+    margin-top: 30px;
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+
+}
+.comment-palce{
+    margin-left: 20px;
+}
+.first-project{
+    width: 400px;
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid;
+    height: 150px;
+    margin-left: 50px;
+    margin-bottom: 20px;
+    box-shadow:5px 5px 5px black;
+
+}
+.first-project img{
+    width: 200px;
+    margin: 10px;
+    
+}
+.first-project h5{
+    font-size: 30px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.first-project P {
+    font-size: 10PX;
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
