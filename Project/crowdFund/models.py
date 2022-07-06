@@ -48,6 +48,7 @@ class UserProfiles(models.Model):
         upload_to='profileimage', blank=False)
     country = models.CharField(max_length=15,)
     facebook_profile = models.URLField(null=True, blank=True)
+    Totaldonated = models.BigIntegerField(default=0)
 
 
 class projects(models.Model):
@@ -62,8 +63,8 @@ class projects(models.Model):
         null=False, default=datetime.date(datetime.now()))
     endTime = models.DateField(null=False)
     numberOfUsersRated = models.IntegerField(default=0)
-    projectRating = models.IntegerField(default=0)
     donations = models.BigIntegerField(default=0)
+    projectRating = models.IntegerField(default=0)
 
 
 class images(models.Model):
