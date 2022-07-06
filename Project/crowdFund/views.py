@@ -79,6 +79,8 @@ def createProject(request):
         context['form'] = form
         return render(request, 'CreateProject.html', context)
 
+# FUNCTION THAT ADDS IMAGES TO DB
+
 
 def addimages(request):
     if request.method == 'POST':
@@ -158,8 +160,7 @@ def viewProjects(request, projectTitle=""):
     context['goal'] = project.target
     context['details'] = project.Details
     context['endTime'] = project.endTime
-    tags = Tags.objects.filter(
-        ProjectTitle=project.title)
+    tags = Tags.objects.filter(ProjectTitle=project.title)
     for tag in tags:
         print("--------------------------")
         print(tag.title)
@@ -189,11 +190,14 @@ def donateProject(request, title):
         print(value)
         project = projects.objects.get(
             title=title)
+        user = UserProfiles.objects.get(
+            username=request.session.get('username'))
         sum = int(project.donations) + int(value)
         project.donations = project.donations + sum
-        print(request.POST['Amount'])
-        print(project.donations)
         project.save()
+        user.Totaldonated = user.Totaldonated + int(value)
+        request.session['donations'] = user.Totaldonated
+        user.save()
         return HttpResponseRedirect("/user/viewProjects/"+project.title)
     return HttpResponseRedirect("/user/viewProjects/"+project.title)
 
@@ -204,7 +208,6 @@ def rateProject(request, title, val):
     project.projectRating = project.projectRating + val
     project.numberOfUsersRated = project.numberOfUsersRated + 1
     project.save()
-    # return render(request, 'view-project.html')
     return HttpResponseRedirect("/user/viewProjects/"+project.title)
 
 
@@ -247,6 +250,7 @@ def loginUserView(request):
                 request.session['profile_pic_url'] = user.profile_pic.url
                 request.session['first_name'] = user.first_name
                 request.session['last_name'] = user.last_name
+                request.session['donations'] = user.Totaldonated
                 request.session['email'] = user.email
                 request.session['b_date'] = str(user.b_date)
                 p = str(user.phone_number)
