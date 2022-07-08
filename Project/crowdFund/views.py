@@ -26,6 +26,10 @@ from vars import *
 
 def home(request):
     if (request.session.get('username') != None):
+        context = {}
+        context['topfive'] = projects.objects.all().order_by('-startTime')[':5']
+        if request.method == 'GET':
+         return render(request, 'index.html', context)
         return render(request, 'index.html')
     else:
         return HttpResponseRedirect('user/logout')
@@ -635,6 +639,35 @@ def search(request):
         else:
 
             return render(request, 'search.html', context)
+
+    else:
+
+        return HttpResponseRedirect('allProjects')
+def sortbycat(request):
+    if request.method == 'POST':
+        context={}
+        cat = request.POST['filterss']
+
+        if cat == 'all':
+
+            return HttpResponseRedirect('/projects/projects_all')
+
+        else:
+            if cat=='c':
+
+                context['projects'] = projects.objects.filter(category=cat)
+
+            return render(request, 'index.html', context)
+            if cat=='p':
+
+                context['projects'] = projects.objects.filter(category=cat)
+
+            return render(request, 'index.html', context)
+            if cat=='t':
+
+                context['projects'] = projects.objects.filter(category=cat)
+
+            return render(request, 'index.html', context)
 
     else:
 

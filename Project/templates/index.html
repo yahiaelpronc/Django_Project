@@ -125,6 +125,34 @@
       </div>
     </section>
 
+    <section id="pricing" class="pricing">
+      <div class="container">
+        <div style="margin-bottom:30px">
+          <h1>search results : </h1>
+        </div>
+        <div class="row">
+
+          {% for project in topfive%}
+          <div class="col-lg-4 col-md-6 d-flex my-5">
+          <div class="box" data-aos="fade-right">
+            <div class="filtr-item col-sm-2" data-category="1" data-sort="white sample">
+            </div>
+            <h2 style="color:rgb(43, 35, 32);">{{ project.title }}</h2>
+            <div class="float-left">
+              <p><small class="text-success">By :{{ project.createdByUsername }}</small></p>
+              <p><strong>Raised:</strong><small class="text-success"> {{ project.donations }}</small></p>
+              <p><strong>Goal:</strong><small class="text-danger"> {{ project.target }}</small></p>
+            </div>
+            <div class="btn-wrap">
+              <a href="viewProjects/{{ project.title }}" class="btn-buy">Donate Now</a>
+            </div>
+          </div>
+        </div>
+          {% endfor %}
+
+
+        </div>
+    </section>
 <!-- End #main -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
