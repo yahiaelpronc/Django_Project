@@ -7,6 +7,65 @@
     <title>Search</title>
 </head>
 <body>
-    
+  <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
+
+      <div class="logo">
+        <h1 class="text-light"><a href="/">CrowdFunding</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="active" href="/">Home</a></li>
+          <li><a href="user/allProjects">All Projects</a></li>
+          <li><a href="user/createProject">Create Project</a></li>
+          {% if request.session.username == None %}
+            <li><a href="user/login">Login</a></li>
+            <li><a href="#">/</a></li>
+            <li><a href="user/Register">Register</a></li>
+          {% else %}
+          <li><a href="user/myProjects">My Projects</a></li>
+          <li><a href="user/profile">My Info</a></li>
+          <li><a href="user/profile">Hello ,  {{request.session.username}}</a>  </li>
+            <li><a href="user/logout">Logout</a></li>
+          {% endif %}
+
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+    <section id="pricing" class="pricing">
+      <div class="container">
+        <div style="margin-bottom:30px">
+          <h1>search results : </h1>
+        </div>
+        <div class="row">
+
+          {% for project in projects%}
+          <div class="col-lg-4 col-md-6 d-flex my-5">
+          <div class="box" data-aos="fade-right">
+            <div class="filtr-item col-sm-2" data-category="1" data-sort="white sample">
+            </div>
+            <h2 style="color:rgb(43, 35, 32);">{{ project.title }}</h2>
+            <div class="float-left">
+              <p><small class="text-success">By :{{ project.createdByUsername }}</small></p>
+              <p><strong>Raised:</strong><small class="text-success"> {{ project.donations }}</small></p>
+              <p><strong>Goal:</strong><small class="text-danger"> {{ project.target }}</small></p>
+            </div>
+            <div class="btn-wrap">
+              <a href="viewProjects/{{ project.title }}" class="btn-buy">Donate Now</a>
+            </div>
+          </div>
+        </div>
+          {% endfor %}
+
+
+        </div>
+    </section>
 </body>
 </html>

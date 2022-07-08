@@ -606,3 +606,36 @@ def editprofile(request):
 
 # def getcsrf():
 #     pass
+def search(request):
+    if request.method == 'POST':
+
+        search = request.POST['search']
+
+        proj = projects.objects.all()
+
+        context = {}
+
+        context['projects'] = projects.objects.filter(title__contains=search).all
+
+        tag = Tags.objects.filter(title__contains=search).all()
+
+        arr1 = []
+
+        for tg in tag:
+            arr1.append(tg.project_id)
+
+
+        context['projecttag'] = projects.objects.filter(id__in=arr1)
+
+
+        if Tags.objects.filter(title__contains=search).exists():
+
+            return render(request, 'search.html', context)
+
+        else:
+
+            return render(request, 'search.html', context)
+
+    else:
+
+        return HttpResponseRedirect('allProjects')

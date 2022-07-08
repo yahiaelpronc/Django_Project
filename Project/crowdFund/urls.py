@@ -43,5 +43,6 @@ urlpatterns = [
     path('cancelProject/<title>', cancelProject, name='cancelProject'),
     path('addimages', addimages, name='addimages'),
     path('addtags', addtags, name='addtags'),
+    path('search',search, name='search'),
     path('verify/<str:username>/<dates>', verify, name='verify'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

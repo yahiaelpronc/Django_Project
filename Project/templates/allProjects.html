@@ -47,6 +47,11 @@
           <li><a class = "active" href="allProjects">All Projects</a></li>
           <li><a href="myProjects">My Projects</a></li>
           <li><a href="createProject">Create Project</a></li>
+          <li style=" padding-left: 20px;">
+            <form action="/projects/search" method="Post" enctype="multipart/form-data" class="d-flex">
+                {%csrf_token%}
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></li>
           {% if request.session.username == None %}
             <li><a href="login">Login</a></li>
             <li><a href="#">/</a></li>
