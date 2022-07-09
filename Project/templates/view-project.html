@@ -11,9 +11,9 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>project</title>
     <style>
-        a{
-            text-decoration:none;
-            color:white;
+        a {
+            text-decoration: none;
+            color: white;
         }
     </style>
 </head>
@@ -67,37 +67,38 @@
             <div class="col-8 ">
                 <div class="deatels">
                     <!-- <div class=deatels""> -->
-                    <div class="deatels-img"  style="max-height:200px;max-width:200px">
+                    <div class="deatels-img" style="max-height:200px;max-width:200px">
 
 
 
 
-                        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel"  style="max-height:200px;max-width:200px">
-                            <div class="carousel-inner"  style="max-height:200px;max-width:200px">
+                        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel"
+                            style="max-height:200px;max-width:200px">
+                            <div class="carousel-inner" style="max-height:200px;max-width:200px">
                                 <div class="carousel-item active" style="max-height:200px;max-width:200px">
-                                    <img src = "{{ imgs1 }}"
-                                        class="d-block" alt="..." style="max-height:200px;max-width:200px">
+                                    <img src="{{ imgs1 }}" class="d-block" alt="..."
+                                        style="max-height:200px;max-width:200px">
                                 </div>
                                 {% for img in imgs|slice:"1:" %}
-                                <div class="carousel-item"  style="max-height:200px;max-width:200px">
-                                    <img src = "{{ img.title.url }}"
-                                        class="d-block" alt="..." style="max-height:200px;max-width:200px">
+                                <div class="carousel-item" style="max-height:200px;max-width:200px">
+                                    <img src="{{ img.title.url }}" class="d-block" alt="..."
+                                        style="max-height:200px;max-width:200px">
                                 </div>
                                 {% endfor %}
+                            </div>
                         </div>
-                    </div>
 
 
 
 
 
 
-                    
+
                     </div>
                     <div class="text-datels">
                         <h4>Project Title : {{ title }}</h4>
                         <div class="span">
-                            <span>  Donated : {{ donated }}</span>
+                            <span> Donated : {{ donated }}</span>
                             <span> Goal : {{ goal }}</span>
                             <span> Rating : {{ Rating }}</span>
                             <span> Details : {{ details }}</span>
@@ -113,12 +114,14 @@
 
 
                     <div class="buttons">
-                        <div class="report"> <button type="button" class="btn btn-warning"><a href="/user/reportProject/{{ title }}">Report</a></button> </div>
-                        <div class="cancel"> <button type="button" class="btn btn-danger btn-report "><a href="/user/cancelProject/{{ title }}">Cancel Project</a></button></div>
+                        <div class="report"> <button type="button" class="btn btn-warning"><a
+                                    href="/user/reportProject/{{ title }}">Report</a></button> </div>
+                        <div class="cancel"> <button type="button" class="btn btn-danger btn-report "><a
+                                    href="/user/cancelProject/{{ title }}">Cancel Project</a></button></div>
                         <div class="dropdown">
                             <button class="btn btn-secondary w-80 dropdown-toggle" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                               Rating
+                                Rating
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><a class="dropdown-item" href="/user/rateProject/{{ title }}/1">1</a></li>
@@ -178,7 +181,9 @@
                     <div class="first-project d-flex justify-content-center align-items-center">
                         <div class="text-si">
                             <h2> Project Title </h2>
-                            <h4> <a class="text-primary" href="/user/viewProjects/{{ sim.ProjectTitle }}">{{ sim.ProjectTitle }}</a> </h4>
+                            <h5>{{ sim.tag }} </h5>
+                                    <h4> <a class="text-primary"
+                                    href="/user/viewProjects/{{ sim.ProjectTitle }}">{{ sim.ProjectTitle }}</a> </h4>
                         </div>
                     </div>
                     {% endfor %}

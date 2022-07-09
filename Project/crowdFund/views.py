@@ -27,9 +27,10 @@ from vars import *
 def home(request):
     if (request.session.get('username') != None):
         context = {}
-        context['topfive'] = projects.objects.all().order_by('-startTime')[':5']
+        context['topfive'] = projects.objects.all().order_by(
+            '-startTime')[:5]
         if request.method == 'GET':
-         return render(request, 'index.html', context)
+            return render(request, 'index.html', context)
         return render(request, 'index.html')
     else:
         return HttpResponseRedirect('user/logout')
@@ -165,10 +166,9 @@ def viewProjects(request, projectTitle=""):
     context['details'] = project.Details
     context['endTime'] = project.endTime
     tags = Tags.objects.filter(ProjectTitle=project.title)
+    context['tags'] = tags
+    context['sims'] = []
     for tag in tags:
-        print("--------------------------")
-        print(tag.title)
-        print("--------------------------")
         similarProject = Tags.objects.filter(
             title=tag.title)
         context['sims'] = similarProject
@@ -227,7 +227,10 @@ def cancelProject(request, title):
     project = projects.objects.get(
         title=title)
     percentage = project.donations/project.target
-    if(project.createdByUsername == request.session['username'] and percentage > 0.25):
+    print('===========================')
+    print(percentage)
+    print('===========================')
+    if(project.createdByUsername == request.session['username'] and percentage < 0.25):
         project.delete()
         return HttpResponseRedirect("/")
     else:
@@ -619,7 +622,8 @@ def search(request):
 
         context = {}
 
-        context['projects'] = projects.objects.filter(title__contains=search).all
+        context['projects'] = projects.objects.filter(
+            title__contains=search).all
 
         tag = Tags.objects.filter(title__contains=search).all()
 
@@ -628,9 +632,7 @@ def search(request):
         for tg in tag:
             arr1.append(tg.project_id)
 
-
         context['projecttag'] = projects.objects.filter(id__in=arr1)
-
 
         if Tags.objects.filter(title__contains=search).exists():
 
@@ -643,9 +645,11 @@ def search(request):
     else:
 
         return HttpResponseRedirect('allProjects')
+
+
 def sortbycat(request):
     if request.method == 'POST':
-        context={}
+        context = {}
         cat = request.POST['filterss']
 
         if cat == 'all':
@@ -653,17 +657,17 @@ def sortbycat(request):
             return HttpResponseRedirect('/projects/projects_all')
 
         else:
-            if cat=='c':
+            if cat == 'c':
 
                 context['projects'] = projects.objects.filter(category=cat)
 
             return render(request, 'index.html', context)
-            if cat=='p':
+            if cat == 'p':
 
                 context['projects'] = projects.objects.filter(category=cat)
 
             return render(request, 'index.html', context)
-            if cat=='t':
+            if cat == 't':
 
                 context['projects'] = projects.objects.filter(category=cat)
 
